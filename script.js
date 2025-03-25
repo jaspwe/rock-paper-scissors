@@ -1,5 +1,12 @@
 let humanScore = 0;
 let computerScore = 0;
+const disout = document.querySelector(".display");
+const humScrBoard = document.querySelector("#humanScore");
+const comScrBoard = document.querySelector("#computerScore");
+
+humScrBoard.textContent = humanScore;
+comScrBoard.textContent = computerScore;
+disout.textContent = "test";
 
 function getComputerChoice(){
     let choice = Math.random();
@@ -14,67 +21,69 @@ function getComputerChoice(){
     }
 }
 
-function getHumanChoice(){
-    let choice = prompt("'rock', 'paper', or 'scissors'?").toLowerCase()
-    if (choice == "rock"){
-        return "rock";
-    } else if (choice == "scissors"){
-        return "scissors"
-    } else {
-        return "paper"
-    }
-}
-
-function playRound(){
+function playRound(choice){
     comp = getComputerChoice()
-    hum = getHumanChoice()
+    hum = choice;
 
     if (comp == hum){
-        console.log(comp + " vs " + hum + "! Draw!")
+        disout.textContent = comp + " vs " + hum + "! Draw!"
     } else if (comp == "rock"){
-        if (hum == "paper"){
-            console.log(comp + " vs " + hum + "! Loose!")
+        if (hum == "scissors"){
+            disout.textContent = comp + " vs " + hum + "! Loose!"
             ++computerScore
         } else {
-            console.log(comp + " vs " + hum + "! Win!")
+            disout.textContent = comp + " vs " + hum + "! Win!"
             ++humanScore
 
         }
     } else if (comp == "paper"){
         if (hum == "rock"){
-            console.log(comp + " vs " + hum + "! Loose!")
+            disout.textContent = comp + " vs " + hum + "! Loose!"
             ++computerScore
         } else {
-            console.log(comp + " vs " + hum + "! Win!")
+            disout.textContent = comp + " vs " + hum + "! Win!"
             ++humanScore
         }
     } else if (comp == "scissors"){
-        if (hum == "rock"){
-            console.log(comp + " vs " + hum + "! Loose!")
+        if (hum == "paper"){
+            disout.textContent = comp + " vs " + hum + "! Loose!"
             ++computerScore
         } else {
-            console.log(comp + " vs " + hum + "! Win!")
+            disout.textContent = comp + " vs " + hum + "! Win!"
             ++humanScore
         }
     }
+    humScrBoard.textContent = humanScore;
+    comScrBoard.textContent = computerScore;
 }
 
 function playGame(){
-    playRound()
-    playRound()
-    playRound()
-    playRound()
-
-    console.log("Human: " + humanScore)
-    console.log("Computer: " + computerScore)
-
-    if (humanScore < computerScore){
-        alert("You Lost!");
-    }else if (humanScore > computerScore){
-        alert("You Won!");
-    } else {
-        alert("ITS A DRAW!")
-    }
+    let round = 0;
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach((button) => {
+        button.addEventListener("click", function() {
+            let choice = button.id;
+            playRound(choice)
+            round++;
+            if (round == 5){
+                endGame();
+                round = 0;
+            }
+        });
+    })
 }
 
-playGame()
+function endGame(){
+
+    if (humanScore < computerScore){
+        disout.textContent = "You Lost!";
+    }else if (humanScore > computerScore){
+        disout.textContent = "You Won!";
+    } else {
+        disout.textContent = "ITS A DRAW!";
+    }
+    humanScore = 0;
+    computerScore = 0;
+}
+
+playGame();
